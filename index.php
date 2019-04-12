@@ -42,7 +42,6 @@ $user_name = 'rubackoff'; // укажите здесь ваше имя
                     <a href="#">Вход</a>
                 </li>
             </ul>
-            }
             <?php endif; ?>
         </nav>
     </div>
