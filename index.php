@@ -107,7 +107,16 @@ $user_name = 'rubackoff'; // укажите здесь ваше имя
                 ]
             ];
             ?>
-            <!--заполните этот список из массива с товарами-->
+            <?php
+            function formatting_price($price)
+            {
+                $price = ceil($price);
+                if ($price >= 1000) {
+                    $price = number_format ($price, 0 , ".", " ");
+                    }
+                    return $price .= " ₽";
+            }
+            ?>
         <?php foreach ($cats as $key => $item): ?>
             <li class="lots__item lot">
                 <div class="lot__image">
@@ -119,7 +128,7 @@ $user_name = 'rubackoff'; // укажите здесь ваше имя
                     <div class="lot__state">
                         <div class="lot__rate">
                             <span class="lot__amount">Стартовая цена</span>
-                            <span class="lot__cost"><?=$item['price']; ?><b class="rub">р</b></span>
+                            <span class="lot__cost"><?=formatting_price($item['price']); ?><b class="rub">р</b></span>
                         </div>
                         <div class="lot__timer timer">
                             12:23
