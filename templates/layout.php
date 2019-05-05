@@ -56,7 +56,9 @@ $user_name = 'rubackoff'; // укажите здесь ваше имя
     <nav class="nav">
         <ul class="nav__list container">
             <?php
-            require('templates/categories_nav.php');
+            echo include_template('categories_nav.php', [
+                'categories' => $categories,
+            ]);
             ?>
         </ul>
     </nav>
