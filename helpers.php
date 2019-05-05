@@ -143,4 +143,19 @@ function include_template($name, array $data = []) {
     return $result;
 }
 
+function esc($str) {
+    $text = htmlspecialchars($str);
+    //$text = strip_tags($str);
+
+    return $text;
+}
+
+function formatting_price($price)
+{
+    $price = ceil($price);
+    if ($price >= 1000) {
+        $price = number_format ($price, 0 , ".", " ");
+    }
+    return $price .= " ₽";
+}
 
