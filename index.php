@@ -1,6 +1,6 @@
 <?php
 require_once('helpers.php');
-$categories = ["Доски и лыжи", "Крепления", "Ботинки", "Одежда", "Инструменты", "Разное"];
+$categories = ['Доски и лыжи', 'Крепления', 'Ботинки', 'Одежда', 'Инструменты', 'Разное'];
 $cats = [
     [
         'name' => '2014 Rossignol District Snowboard',
