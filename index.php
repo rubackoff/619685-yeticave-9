@@ -1,46 +1,41 @@
 <?php
 require_once('helpers.php');
-$categories = ['Доски и лыжи', 'Крепления', 'Ботинки', 'Одежда', 'Инструменты', 'Разное'];
-$cats = [
-    [
-        'name' => '2014 Rossignol District Snowboard',
-        'categories' => 'Доски и лыжи',
-        'price' => 10999,
-        'img' => 'img/lot-1.jpg'
-    ],
-    [
-        'name' => 'DC Ply Mens 2016/2017 Snowboard',
-        'categories' => 'Доски и лыжи',
-        'price' => 159999,
-        'img' => 'img/lot-2.jpg'
-    ],
-    [
-        'name' => 'Крепления Union Contact Pro 2015 года размер L/XL',
-        'categories' => 'Крепления',
-        'price' => 8000,
-        'img' => 'img/lot-3.jpg'
-    ],
-    [
-        'name' => 'Ботинки для сноуборда DC Mutiny Charocal',
-        'categories' => 'Ботинки',
-        'price' => 10999,
-        'img' => 'img/lot-4.jpg'
-    ],
-    [
-        'name' => 'Куртка для сноуборда DC Mutiny Charocal',
-        'categories' => 'Одежда',
-        'price' => 7500,
-        'img' => 'img/lot-5.jpg'
-    ],
-    [
-        'name' => 'Маска Oakley Canopy',
-        'categories' => 'Разное',
-        'price' => 5400,
-        'img' => 'img/lot-6.jpg'
-    ]
-];
+
+$con = mysqli_connect("localhost", "root", "","yeticave");
+
+mysqli_set_charset($con, "utf8");
+
+/* Проверка соединения с БД
+if ($con == false) {
+    print("Ошибка подключения: " . mysqli_connect_error());
+} else {
+    print("Соединение установлено");
+}
+*/
+
+/*Запрос на название и спец. ключ Категорий */
+$sql = "SELECT name, slug FROM Categories";
+$result = mysqli_query($con, $sql);
+$categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+/*
+ * Запрос на название лота, стартовую цену, ссылку на изображение,
+ * название категории.
+ *
+ */
+$sql ='
+SELECT l.name AS "lot_name" , start_price, img, c.name AS "categories_name" FROM Lot l
+JOIN Categories c ON l.categories_id = c.id
+WHERE l.dt_over IS NULL
+ORDER BY l.dt_add DESC
+';
+$result = mysqli_query($con, $sql);
+$cats = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+
 $title = 'Главная';
-//Устанавливаем время по уомлчанию
+
+//Устанавливаем время по умолчанию
 date_default_timezone_set("Europe/Moscow");
 setlocale(LC_ALL, 'ru_RU');
 
@@ -69,6 +64,4 @@ $layout_content = include_template('layout.php', [
 ]);
 
 print($layout_content);
-
-
 
