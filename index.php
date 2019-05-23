@@ -1,7 +1,7 @@
 <?php
 require_once('helpers.php');
 
-$con = mysqli_connect("localhost", "root", "","yeticave");
+$con = mysqli_connect("localhost", "root", "", "yeticave");
 
 mysqli_set_charset($con, "utf8");
 
@@ -13,8 +13,10 @@ if ($con == false) {
 }
 */
 
-/*Запрос на название и спец. ключ Категорий */
-$sql = "SELECT name, slug FROM Categories";
+$title = 'Главная';
+
+/*Запрос на название и спец. ключ категорий */
+$sql = 'SELECT name, slug FROM Categories';
 $result = mysqli_query($con, $sql);
 $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
@@ -23,17 +25,28 @@ $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
  * название категории.
  *
  */
-$sql ='
-SELECT l.name AS "lot_name" , start_price, img, c.name AS "categories_name" FROM Lot l
+$sql = '
+SELECT l.name AS "lot_name" , start_price, img, c.name, description, dt_over AS "categories_name", l.id AS "lot_id" FROM Lot l
 JOIN Categories c ON l.categories_id = c.id
-WHERE l.dt_over IS NULL
 ORDER BY l.dt_add DESC
 ';
 $result = mysqli_query($con, $sql);
-$cats = mysqli_fetch_all($result, MYSQLI_ASSOC);
+$lots = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
+/*
+ * Создали массив с массивами из списка лотов.
+ * В массивы добавили ключи url с ссылкой и запросом на лот по id.
+ */
+foreach ($lots as $key => $lot) {
+    $params = [
+        'id' => $lot['lot_id']
+    ];
+    $scriptname = pathinfo('lot.php', PATHINFO_BASENAME);
+    $query = http_build_query($params);
+    $url = "/" . $scriptname . "?" . $query;
+    $lots[$key]['url'] = $url;
+}
 
-$title = 'Главная';
 
 //Устанавливаем время по умолчанию
 date_default_timezone_set("Europe/Moscow");
@@ -50,11 +63,13 @@ if ($dt_diff->h <= 1) {
     $less_than_hour_class = "timer--finishing";
 }
 
+//Подключаем шаблоны
 $content = include_template('index.php', [
     'categories' => $categories,
-    'cats' => $cats,
+    'lots' => $lots,
     'hours_count' => $hours_count,
-    'less_than_hour_class' => $less_than_hour_class
+    'less_than_hour_class' => $less_than_hour_class,
+    'url' => $url
 ]);
 $layout_content = include_template('layout.php', [
     'content' => $content,
