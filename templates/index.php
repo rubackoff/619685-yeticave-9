@@ -16,14 +16,14 @@
             <h2>Открытые лоты</h2>
         </div>
         <ul class="lots__list">
-            <?php foreach ($cats as $item): ?>
+            <?php foreach ($lots as $item): ?>
                 <li class="lots__item lot">
                     <div class="lot__image">
                         <img src="<?= $item['img']; ?>" width="350" height="260" alt="">
                     </div>
                     <div class="lot__info">
                         <span class="lot__category"><?= esc($item['categories_name']); ?></span>
-                        <h3 class="lot__title"><a class="text-link" href="pages/lot.html"><?= esc($item['lot_name']); ?></a>
+                        <h3 class="lot__title"><a class="text-link" href="<?= $item['url']; ?>"><?= esc($item['lot_name']); ?></a>
                         </h3>
                         <div class="lot__state">
                             <div class="lot__rate">
