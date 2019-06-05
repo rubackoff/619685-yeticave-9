@@ -21,7 +21,7 @@ $is_404 = true;
 if (isset($_GET['id'])) {
     $id = (int)$_GET['id'];
     $sql = "
-SELECT l.name AS 'lot_name' , start_price, img, c.name AS 'categories_name', description, dt_over, l.id AS 'lot_id' FROM Lot l
+SELECT l.name AS 'lot_name' , start_price, step_price, img, c.name AS 'categories_name', description, dt_over, l.id AS 'lot_id' FROM Lot l
 JOIN Categories c ON l.categories_id = c.id
 WHERE l.id = $id
 ";
@@ -37,6 +37,8 @@ if ($is_404) {
     http_response_code(404);
     die();
 }
+
+$current_price = (int)($lot['start_price']) + (int)($lot['step_price']);
 
 //Устанавливаем время по умолчанию
 date_default_timezone_set("Europe/Moscow");
@@ -57,7 +59,8 @@ $content = include_template('lot.php', [
     'categories' => $categories,
     'lot' => $lot,
     'hours_count' => $hours_count,
-    'less_than_hour_class' => $less_than_hour_class
+    'less_than_hour_class' => $less_than_hour_class,
+    'current_price' => $current_price
 ]);
 $layout_content = include_template('layout.php', [
     'content' => $content,
