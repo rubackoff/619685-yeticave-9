@@ -1,7 +1,3 @@
-<?php
-$is_auth = rand(0, 1);
-$user_name = 'rubackoff'; // укажите здесь ваше имя
-?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -23,14 +19,13 @@ $user_name = 'rubackoff'; // укажите здесь ваше имя
                 <input type="search" name="search" placeholder="Поиск лота">
                 <input class="main-header__search-btn" type="submit" name="find" value="Найти">
             </form>
+            <?php if (isset($_SESSION['user'])): ?>
             <a class="main-header__add-lot button" href="add.php">Добавить лот</a>
-
             <nav class="user-menu">
-                <?php if ($is_auth == 1): ?>
                     <div class="user-menu__logged">
-                        <p>rubackoff</p>
-                        <a class="user-menu__bets" href="pages/my-bets.html">Мои ставки</a>
-                        <a class="user-menu__logout" href="#">Выход</a>
+                        <p><?=strip_tags($_SESSION['user']['name']); ?></p>
+                        <a class="user-menu__bets" href="my-bets.php">Мои ставки</a>
+                        <a class="user-menu__logout" href="logout.php">Выход</a>
                     </div>
                 <?php else: ?>
                     <ul class="user-menu__list">
@@ -104,7 +99,7 @@ $user_name = 'rubackoff'; // укажите здесь ваше имя
                 </svg>
             </a>
         </div>
-        <a class="main-footer__add-lot button" href="add-lot.html">Добавить лот</a>
+        <a class="main-footer__add-lot button" href="add.php">Добавить лот</a>
         <div class="main-footer__developed-by">
             <span class="visually-hidden">Разработано:</span>
             <a class="logo-academy" href="https://htmlacademy.ru/intensive/php">

@@ -1,6 +1,12 @@
 <?php
 require_once('helpers.php');
 
+session_start();
+
+if (isset($_SESSION['user'])){
+    header("Location: /");
+    exit();
+}
 
 $con = mysqli_connect("localhost", "root", "", "yeticave");
 
@@ -29,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     //Проверяем формат email
     foreach ($_POST as $key => $value) {
         if ($key == 'email') {
-            if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
+            if (!filter_var($value, FILTER_VALIDATE_EMAIL) && !count($errors['email']) ){
                 $errors[$key] = 'Неверный формат email';
             }
         }
@@ -51,9 +57,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
             $password = password_hash($form['password'], PASSWORD_DEFAULT);
 
-            $sql = 'INSERT INTO User (dt_add, email, name, password) 
-            VALUES (NOW(), ?, ?, ?)';
-            $stmt = db_get_prepare_stmt($con, $sql, [$form['email'], $form['name'], $password]);
+            $sql = 'INSERT INTO User (dt_add, email, name, message, password) 
+            VALUES (NOW(), ?, ?, ?, ?)';
+            $stmt = db_get_prepare_stmt($con, $sql, [$form['email'], $form['name'], $form['message'], $password]);
             $res = mysqli_stmt_execute($stmt);
         }
     }
@@ -67,7 +73,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 } else {
     $content = include_template('sign-up.php', ['categories' => $categories]);
 }
-
 
 $layout_content = include_template('layout.php', [
     'content' => $content,
