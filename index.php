@@ -1,6 +1,8 @@
 <?php
 require_once('helpers.php');
 
+session_start();
+
 $con = mysqli_connect("localhost", "root", "", "yeticave");
 
 mysqli_set_charset($con, "utf8");
@@ -73,9 +75,8 @@ $content = include_template('index.php', [
 ]);
 $layout_content = include_template('layout.php', [
     'content' => $content,
-    'user_name' => $user_name,
     'title' => $title,
-    'categories' => $categories,
+    'categories' => $categories
 ]);
 
 print($layout_content);

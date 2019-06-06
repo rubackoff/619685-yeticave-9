@@ -1,5 +1,12 @@
 <?php
 require_once('helpers.php');
+session_start();
+
+if (!isset($_SESSION['user'])) {
+    header("Location: /sign-up.php");
+    exit();
+}
+
 
 $con = mysqli_connect("localhost", "root", "", "yeticave");
 

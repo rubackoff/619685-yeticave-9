@@ -14,14 +14,15 @@
             <div class="lot-item__left">
                 <div class="lot-item__image">
                     <img src="uploads/<?= $lot['img']; ?>" width="730" height="548"
-                         alt="<?= esc($lot['categories_name']); ?>">
+                         alt="<?= $lot['categories_name']; ?>">
                 </div>
-                <p class="lot-item__category">Категория: <span><?= esc($lot['categories_name']); ?></span></p>
+                <p class="lot-item__category">Категория: <span><?=$lot['categories_name']; ?></span></p>
                 <p class="lot-item__description">
                     <?= esc($lot['description']); ?>
                 </p>
             </div>
             <div class="lot-item__right">
+                <?php if (isset($_SESSION['user'])): ?>
                 <div class="lot-item__state">
                     <div class="lot-item__timer timer <?= $less_than_hour_class; ?>">
                         <?= $hours_count; ?>
@@ -44,7 +45,7 @@
                         <button type="submit" class="button">Сделать ставку</button>
                     </form>
                 </div>
-
+                <?php endif; ?>
             </div>
         </div>
     </section>
