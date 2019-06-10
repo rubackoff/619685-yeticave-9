@@ -22,7 +22,7 @@
                 </p>
             </div>
             <div class="lot-item__right">
-                <?php if (isset($_SESSION['user'])): ?>
+
                 <div class="lot-item__state">
                     <div class="lot-item__timer timer <?= $less_than_hour_class; ?>">
                         <?= $hours_count; ?>
@@ -30,17 +30,23 @@
                     <div class="lot-item__cost-state">
                         <div class="lot-item__rate">
                             <span class="lot-item__amount">Текущая цена</span>
-                            <span class="lot-item__cost"><?= $lot['start_price']; ?> р</span>
+                            <span class="lot-item__cost"><?= $bet; ?> р</span>
                         </div>
                         <div class="lot-item__min-cost">
                             Мин. ставка <span><?= $current_price; ?> р</span>
                         </div>
                     </div>
-                    <form class="lot-item__form" action="https://echo.htmlacademy.ru" method="post" autocomplete="off">
-                        <p class="lot-item__form-item form__item form__item--invalid">
-                            <label for="cost">Ваша ставка</label>
-                            <input id="cost" type="text" name="cost" placeholder="<?= $current_price ?>">
-                            <span class="form__error">Введите наименование лота</span>
+                    <?php $invalid = count($errors) ? "form--invalid" : ""; ?>
+                    <?php if (isset($_SESSION['user'])): ?>
+                    <form class="lot-item__form <?= $invalid; ?>" action="" method="post" autocomplete="off">
+                        <?php
+                        $classname = isset($errors['price']) ? "form__item--invalid" : "";
+                        $value = isset($form['price']) ? $form['price'] : "";
+                        ?>
+                        <p class="lot-item__form-item form__item <?= $classname; ?>">
+                            <label for="price">Ваша ставка</label>
+                            <input id="price" type="text" name="price" placeholder="<?= $current_price ?>" value="<?= $value; ?>">
+                            <span class="form__error"><?= $errors['price']; ?></span>
                         </p>
                         <button type="submit" class="button">Сделать ставку</button>
                     </form>

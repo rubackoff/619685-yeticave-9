@@ -10,7 +10,7 @@
         </nav>
         </nav>
     <?php $invalid = count($errors) ? "form--invalid" : ""; ?>
-        <form class="form container" action="login.php" method="post">
+        <form class="form container <?= $invalid; ?>" action="login.php" method="post">
             <h2>Вход</h2>
             <?php
             $classname = isset($errors['email']) ? "form__item--invalid" : "";

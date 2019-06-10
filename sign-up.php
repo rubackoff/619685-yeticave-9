@@ -3,7 +3,7 @@ require_once('helpers.php');
 
 session_start();
 
-if (isset($_SESSION['user'])){
+if (isset($_SESSION['user'])) {
     header("Location: /");
     exit();
 }
@@ -19,6 +19,9 @@ $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 
 $content = include_template('sign-up.php', ['categories' => $categories]);
+$dict = [];
+$errors = [];
+$form = [];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $form = $_POST;
@@ -26,21 +29,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     //Определяем обязательные поля
     $required_fields = ['email', 'password', 'name', 'message'];
     $dict = ['email' => 'Email', 'password' => 'Пароль', 'name' => 'Имя пользователя', 'message' => 'Контактные данные'];
-    $errors = [];
     foreach ($required_fields as $field) {
         if (empty($_POST[$field])) {
             $errors[$field] = 'Это поле надо заполнить';
         }
     }
     //Проверяем формат email
-    foreach ($_POST as $key => $value) {
-        if ($key == 'email') {
-            if (!filter_var($value, FILTER_VALIDATE_EMAIL) && !count($errors['email']) ){
-                $errors[$key] = 'Неверный формат email';
+            if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) && !count($errors['email'])) {
+                $errors['email'] = 'Неверный формат email';
             }
-        }
-    }
-
     /*
      * Проверяем введённый email на наличие в Бд
      * Если нет пользователя с данным email
@@ -67,12 +64,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($res && empty($errors)) {
         header("Location: /login.php");
         exit();
-    } else {
-        $content = include_template('sign-up.php', ['form' => $form, 'errors' => $errors, 'dict' => $dict, 'categories' => $categories]);
     }
-} else {
-    $content = include_template('sign-up.php', ['categories' => $categories]);
 }
+
+$content = include_template('sign-up.php', ['form' => $form, 'errors' => $errors, 'dict' => $dict, 'categories' => $categories]);
 
 $layout_content = include_template('layout.php', [
     'content' => $content,
