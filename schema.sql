@@ -35,4 +35,6 @@ CREATE TABLE User
     email    CHAR(128) NOT NULL UNIQUE,
     name     CHAR(128) NOT NULL UNIQUE,
     password CHAR(64)  NOT NULL
-)
+);
+
+CREATE FULLTEXT INDEX lots_search ON lot(name, description);
